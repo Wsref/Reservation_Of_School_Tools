@@ -69,39 +69,41 @@
             container.innerHTML = html; // Set the HTML content to the container element
         })
         .catch(error => console.error('Error:', error));
+        initializechart();
 
-        let ctx = document.getElementById("myChart").getContext('2d');
+        
 
-// Create the chart
-let myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['January', 'February', 'March', 'April', 'May'],
-        datasets: [{
-            label: 'Sales',
-            data: [10, 20, 30, 40, 50],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)', // Bar color
-            borderColor: 'rgba(255, 99, 132, 1)', // Border color
-            borderWidth: 1
-        },
-    {
-        label: 'loss',
-            data: [60, 2, 31, 40, 50],
-            backgroundColor: 'rgba(25, 99, 132, 0.2)', // Bar color
-            borderColor: 'rgba(255, 99, 132, 1)', // Border color
-            borderWidth: 1
-    }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
+//         let ctx = document.getElementById("myChart").getContext('2d');
+// // Create the chart
+// let myChart = new Chart(ctx, {
+//     type: 'bar',
+//     data: {
+//         labels: ['January', 'February', 'March', 'April', 'May'],
+//         datasets: [{
+//             label: 'Sales',
+//             data: [10, 20, 30, 40, 50],
+//             backgroundColor: 'rgba(255, 99, 132, 0.2)', // Bar color
+//             borderColor: 'rgba(255, 99, 132, 1)', // Border color
+//             borderWidth: 1
+//         },
+//     {
+//         label: 'loss',
+//             data: [60, 2, 31, 40, 50],
+//             backgroundColor: 'rgba(25, 99, 132, 0.2)', // Bar color
+//             borderColor: 'rgba(255, 99, 132, 1)', // Border color
+//             borderWidth: 1
+//     }]
+//     },
+//     options: {
+//         scales: {
+//             yAxes: [{
+//                 ticks: {
+//                     beginAtZero: true
+//                 }
+//             }]
+//         }
+//     }
+// });
 
     };
         
