@@ -1,9 +1,9 @@
-@props(['users'])
+@props(['users','user'])
 
-@foreach($users as $user)
-    <div class="user" id="{{$user['id']}}" >
+@foreach($users as $auser)
+    <div class="user" id="{{$auser['id']}}" >
         <img src="" alt="">
-         {{$user['fname']}} {{$user['pname']}} 
+         {{$auser['fname']}} {{$auser['pname']}} 
     </div>
 @endforeach
 
@@ -22,8 +22,19 @@
         /* border-bottom: 3px solid black; */
 
     }
+    .clicked_user{
+        /* border-radius: 20px; */
+        border-radius: 3px;
+        height: fit-content;
+        padding: 8px;
+        background-color: hsl(0, 0%, 12%);
+        color:white ;
+        transition: background-color 0.2s;
+        border: 1px solid rgb(250, 250, 250);
+
+    }
     .user:hover{
-        background-color: rgb(69, 69, 69);
+        background-color: rgb(125, 125, 125);
         color: aliceblue;
     }
 </style>
@@ -31,64 +42,78 @@
 
 <script>
     
-    var usediv = document.querySelectorAll(".user");
+    let usediv = document.querySelectorAll(".user");
+    usediv.forEach(function(div){
+        console.log(parseInt( <?php echo json_encode($user['id']); ?>));
+        if (parseInt(div.id) === parseInt( <?php echo json_encode($user['id']); ?>)) {
+            console.log(parseInt( <?php echo json_encode($user['id']); ?>));
+            console.log(parseInt(div.id));
 
+            div.className="clicked_user";
+        }
+    })
     // Loop through each div element
     usediv.forEach(function(div) {
-    // Add event listener to each div
-    div.addEventListener("click", function() {
-        // Add your event handling code here
+        // Add event listener to each div
+        div.addEventListener("click", function() {
+            // Add your event handling code here
 
-        let msgBoxcontainer = document.getElementById("messages")
-        msgBoxcontainer.innerHTML=''
-        let UserGendata = document.getElementById("userData")
-        UserGendata.innerHTML=''
-        // msgBoxcontainer.innerHTML= div.textContent + div.id;
-        let id = div.id
-        id = parseInt(id)
+            usediv.forEach(function(div) {
+                div.className = "user";
+             });
+        // Set background color of clicked box to black
+            this.className = "clicked_user";
 
-
-
-
-
-        // Handle button click for component 1
-        //!might remove the click case and just put function
-        getdata(id)
-
-        function getdata(id) {   
-            $.get(`/load-UsermsgBoxAJAX/${id}`, function(response) {
-                $('#messages').html(response.component);
-            });
-            // initializeUsermessagesBox();
-        };
-
-
-
-        fetch(`/load-UserData/${id}`)
-        .then(response => response.text())
-        .then(html => {
-            // Handle the response data as needed
-            document.getElementById("userData").innerHTML = html;
-        })
-        .catch(error => console.error('Error:', error));
-
-
-
-    //     fetch('/get-borrows-html')
-    //     .then(response => response.text()) // Parse the response as text
-    //     .then(html => {
-    //         let container = document.getElementById("container");
-    //         container.innerHTML = html; // Set the HTML content to the container element
-    //     })
-    //     .catch(error => console.error('Error:', error));
-
-    // };
+            let msgBoxcontainer = document.getElementById("messages")
+            msgBoxcontainer.innerHTML=''
+            let UserGendata = document.getElementById("userData")
+            UserGendata.innerHTML=''
+            // msgBoxcontainer.innerHTML= div.textContent + div.id;
+            let id = div.id
+            id = parseInt(id)
 
 
 
 
-        console.log("Div clicked: " + div.textContent);
-    });
+
+            // Handle button click for component 1
+            //!might remove the click case and just put function
+            getdata(id)
+
+            function getdata(id) {   
+                $.get(`/load-UsermsgBoxAJAX/${id}`, function(response) {
+                    $('#messages').html(response.component);
+                });
+                // initializeUsermessagesBox();
+            };
+
+
+
+            fetch(`/load-UserData/${id}`)
+            .then(response => response.text())
+            .then(html => {
+                // Handle the response data as needed
+                document.getElementById("userData").innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+
+
+
+        //     fetch('/get-borrows-html')
+        //     .then(response => response.text()) // Parse the response as text
+        //     .then(html => {
+        //         let container = document.getElementById("container");
+        //         container.innerHTML = html; // Set the HTML content to the container element
+        //     })
+        //     .catch(error => console.error('Error:', error));
+
+        // };
+
+
+
+
+            console.log("Div clicked: " + div.textContent);
+        });
 });
 
 // let usediv = document.querySelector('.user')

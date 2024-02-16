@@ -5,7 +5,7 @@
 
 <div class="container123"  style="margin-left=0;margin-right=0;">
     <div class="usersSideBar">
-        <x-userSideBarchat :users="$users" />
+        <x-userSideBarchat :users="$users" :user="$user"/>
     </div>
     <div class="messages" id="messages">
         <x-UsermessagesBox  :user_requests_data="$user_requests_data" :admin_replies_data="$admin_replies_data"  :user="$user" :chatData="$chatData"  />

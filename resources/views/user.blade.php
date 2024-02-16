@@ -29,6 +29,7 @@
                 {{-- to add curently --}}
             </div>
             <div class="content" id="container">
+                <x-userBorrow :borrows="$borrows"/>
                 {{-- <canvas style="background-color: rgb(255, 255, 255)" id="myChart"></canvas> --}}
                 {{-- <x-userborrowcharts :borrows="$user" /> --}}
 
@@ -40,17 +41,55 @@
 $football_requests = 0;
 $basketball_requests = 0;
 $pingpong_requests = 0;
+$monthsFTB = ['1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0,'8'=>0,'9'=>0,'10'=>0,'11'=>0,'12'=>0];
+$monthsBKB = ['1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0,'8'=>0,'9'=>0,'10'=>0,'11'=>0,'12'=>0];
+$monthsPGP = ['1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0,'8'=>0,'9'=>0,'10'=>0,'11'=>0,'12'=>0];
+
 
 foreach ($borrows as $borrow ) {
-    if ($borrow['material'] == "FootBall") {
-        $football_requests++ ;
-    }
-    if ($borrow['material'] == "BasketBall") {
-        $basketball_requests++ ;
-    }
-    if ($borrow['material'] == "Ping-Pong") {
-        $pingpong_requests++ ;
-    }
+    if ($borrow['userId'] == $user['id']) {
+
+        foreach ($monthsFTB as $monthnum=>$requests) 
+        {
+            if (date('m', strtotime($borrow['dateBorrow'])) == $monthnum) 
+            {
+                if ($borrow['material'] == "FootBall") {
+                    // $requests++;
+                    $monthsFTB[$monthnum]++;
+                    $football_requests++ ;
+                }
+
+            }
+        }
+
+        foreach ($monthsBKB as $monthnum=>$requests) 
+        {
+            if (date('m', strtotime($borrow['dateBorrow'])) == $monthnum) 
+            {
+                if ($borrow['material'] == "BasketBall") {
+                    // $requests++;
+                    $monthsBKB[$monthnum]++;
+                    $basketball_requests++ ;
+                }
+
+            }
+        }
+
+        foreach ($monthsPGP as $monthnum=>$requests) 
+        {
+            if (date('m', strtotime($borrow['dateBorrow'])) == $monthnum) 
+            {
+                if ($borrow['material'] == "Ping-Pong") {
+                    // $requests++;
+                    $monthsPGP[$monthnum]++;
+                    $pingpong_requests++ ;
+                }
+
+            }
+        }
+
+
+}
 }
     
 @endphp
@@ -79,51 +118,108 @@ foreach ($borrows as $borrow ) {
 
     function showOverview() 
     {
+        container.innerHTML=""
         activitiesBtn.className = "OAbtnnNotChosen"
         overviewBtn.className = "OAbtnChosen"
 
         // userComponent.style.display = "block";
         
-        container.innerHTML = "<canvas  id=\"myChart\">ccccccccccccccccccccccccccccccc</canvas>"
+        container.innerHTML = "<canvas class=\"chart\"  id=\"myChart\"></canvas>"
 
             let chart = document.getElementById("myChart")
                      chart.getContext('2d');
 
                     // Create the chart
                     var myChart = new Chart(chart, {
-                        type: 'bar',
+                        type: 'line',
                         data: {
                             labels: ['January', 'February', 'March', 'April', 'May','june','july','august','september','october','November','December'],
                             datasets: [{
                                 label: 'FootBall requests',
-                                data: [<?php echo json_encode($football_requests); ?>  ],
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Bar color
-                                borderColor: 'rgba(255, 99, 132, 1)', // Border color
-                                borderWidth: 1
+                                data: [<?php echo json_encode($monthsFTB['1']); ?>,
+                                <?php echo json_encode($monthsFTB['2']); ?>,
+                                <?php echo json_encode($monthsFTB['3']); ?>,
+                                <?php echo json_encode($monthsFTB['4']); ?>,
+                                <?php echo json_encode($monthsFTB['5']); ?>,
+                                <?php echo json_encode($monthsFTB['6']); ?>,
+                                <?php echo json_encode($monthsFTB['7']); ?>,
+                                <?php echo json_encode($monthsFTB['8']); ?>,
+                                <?php echo json_encode($monthsFTB['9']); ?>,
+                                <?php echo json_encode($monthsFTB['10']); ?>,
+                                <?php echo json_encode($monthsFTB['11']); ?>,
+                                <?php echo json_encode($monthsFTB['12']); ?> ],
+                                backgroundColor: 'rgba(250, 42, 0)', // Bar color
+                                borderColor: 'rgba(250, 42, 0)', // Border color
+                                borderWidth: 4,
+                                fill: false,
+                                tension:0.1,
+                                pointBackgroundColor: 'rgb(250, 42, 0)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgb(250, 42, 0)'
                             },
                         {
                             label: 'Basketball requests',
-                            data: [<?php echo json_encode($basketball_requests); ?>  ],
-                                backgroundColor: 'rgba(25, 99, 132, 0.2)', // Bar color
-                                borderColor: 'rgba(255, 99, 132, 1)', // Border color
-                                borderWidth: 1
+                            data: [<?php echo json_encode($monthsBKB['1']); ?>,
+                                <?php echo json_encode($monthsBKB['2']); ?>,
+                                <?php echo json_encode($monthsBKB['3']); ?>,
+                                <?php echo json_encode($monthsBKB['4']); ?>,
+                                <?php echo json_encode($monthsBKB['5']); ?>,
+                                <?php echo json_encode($monthsBKB['6']); ?>,
+                                <?php echo json_encode($monthsBKB['7']); ?>,
+                                <?php echo json_encode($monthsBKB['8']); ?>,
+                                <?php echo json_encode($monthsBKB['9']); ?>,
+                                <?php echo json_encode($monthsBKB['10']); ?>,
+                                <?php echo json_encode($monthsBKB['11']); ?>,
+                                <?php echo json_encode($monthsBKB['12']); ?>  ],
+                                backgroundColor: 'rgba(162, 250, 0)', // Bar color
+                                borderColor: 'rgba(162, 250, 0)', // Border color
+                                fill: false,
+                                tension:0.1,
+                                borderWidth: 4,
+                                pointBackgroundColor: 'rgb(162, 250, 0)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgb(162, 250, 0)'
                         },
                         {
                             label: 'pingpong requests',
-                            data: [<?php echo json_encode($pingpong_requests); ?>  ],
-                                backgroundColor: 'rgba(115, 49, 132, 0.2)', // Bar color
-                                borderColor: 'rgba(255, 99, 132, 1)', // Border color
-                                borderWidth: 1
+                            data: [<?php echo json_encode($monthsPGP['1']); ?>,
+                                <?php echo json_encode($monthsPGP['2']); ?>,
+                                <?php echo json_encode($monthsPGP['3']); ?>,
+                                <?php echo json_encode($monthsPGP['4']); ?>,
+                                <?php echo json_encode($monthsPGP['5']); ?>,
+                                <?php echo json_encode($monthsPGP['6']); ?>,
+                                <?php echo json_encode($monthsPGP['7']); ?>,
+                                <?php echo json_encode($monthsPGP['8']); ?>,
+                                <?php echo json_encode($monthsPGP['9']); ?>,
+                                <?php echo json_encode($monthsPGP['10']); ?>,
+                                <?php echo json_encode($monthsPGP['11']); ?>,
+                                <?php echo json_encode($monthsPGP['12']); ?> ],
+                                backgroundColor: 'rgba(0, 167, 250)', // Bar color
+                                borderColor: 'rgba(0, 167, 250)', // Border color
+                                fill: false,
+                                tension:0.1,
+                                borderWidth: 4,
+                                pointBackgroundColor: 'rgb(0, 167, 250)',
+                                pointBorderColor: '#fff',
+                                pointHoverBackgroundColor: '#fff',
+                                pointHoverBorderColor: 'rgb(0, 167, 250)'
                         }]
                         },
                         options: {
                             scales: {
                                 yAxes: [{
                                     ticks: {
-                                        beginAtZero: true
+                                        precision: 0
                                     }
                                 }]
-                            }
+                            },
+                            elements: {
+                                line: {
+                                    borderWidth: 3
+                                }
+                                }
                         }
                     });
                 // }
@@ -137,6 +233,7 @@ foreach ($borrows as $borrow ) {
     
     
     function showActivities() {
+        container.innerHTML= ""
         // chart.style.display = "none"
     //     fetch('/get-borrows')
     // .then(response => response.json())
@@ -173,11 +270,12 @@ foreach ($borrows as $borrow ) {
 @endsection
 
 <style>
-    #myChart{
+    .chart{
         /* display: none ; */
         /* right: 550px; */
         /* background-color: yellowgreen; */
-        width: 80%;
+        width: 400px;
+        height: 400px;
     }
     .content{
         height: 500px;
@@ -238,9 +336,22 @@ foreach ($borrows as $borrow ) {
         padding: 10px;
         text-decoration: none;
         color: black;
+        transition: background-color 0.5s;
+        transition: color 0.5s;
+        transition: padding 0.5s;
 
     }
     .chatbtn a:hover{
+        // padding: 15px;
+        padding-right:12px;
+        padding-left:12px;
+        padding-bottom:11px;
+        padding-top:11px;
+
+        width: 50px;
+        height: 30px;
+        background-color: rgb(49, 49, 196);
+        color: rgba(255, 255, 255, 0.995);
         text-decoration: none;
     }
     

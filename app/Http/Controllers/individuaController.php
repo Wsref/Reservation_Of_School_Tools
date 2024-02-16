@@ -23,7 +23,7 @@ class individuaController extends Controller
                 // Start building the query
                 $query = DB::table('individuals');
 
-dd($request->all());
+// dd($request->all());
         foreach ($request->all() as $propertyName => $propertyarray) {    
             // Check if the value is an array
             dd($propertyarray);

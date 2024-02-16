@@ -676,6 +676,16 @@
 
                         request.appendChild(dropBtn)
                         request.appendChild(confirmBtn)
+
+                        let childDivs = responsesLoader_div.getElementsByTagName("div");
+                                let numChildDivs = childDivs.length;
+
+                                // Perform an action if there are no child div elements
+                                if (numChildDivs === 0) {
+                                    console.log("No div elements found inside the parent div.");
+                                    msgMenu_div.style.display = "none"
+
+                                }
                     })
                     
 
