@@ -29,20 +29,45 @@
                 {{-- to add curently --}}
             </div>
             <div class="content" id="container">
+                {{-- <canvas style="background-color: rgb(255, 255, 255)" id="myChart"></canvas> --}}
                 {{-- <x-userborrowcharts :borrows="$user" /> --}}
+
             </div>
         </div>
     </div>
-
-
 </div>
+@php
+$football_requests = 0;
+$basketball_requests = 0;
+$pingpong_requests = 0;
+
+foreach ($borrows as $borrow ) {
+    if ($borrow['material'] == "FootBall") {
+        $football_requests++ ;
+    }
+    if ($borrow['material'] == "BasketBall") {
+        $basketball_requests++ ;
+    }
+    if ($borrow['material'] == "Ping-Pong") {
+        $pingpong_requests++ ;
+    }
+}
+    
+@endphp
+
+
 
 {{-- <script src="../js/test.js"></script> --}}
-{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let container = document.getElementById("container");
+
+    // let chart = document.getElementById("myChart")
+    // chart.style.display = "none"
     
     let overviewBtn= document.getElementById("overview")
     overviewBtn.addEventListener("click",showOverview)
@@ -58,52 +83,53 @@
         overviewBtn.className = "OAbtnChosen"
 
         // userComponent.style.display = "block";
-
-        let container = document.getElementById("container");
-        container.innerHTML = ""
-
-        fetch('/get-borrows-chart-html')
-        .then(response => response.text()) // Parse the response as text
-        .then(html => {
-            // let container = document.getElementById("container");
-            container.innerHTML = html; // Set the HTML content to the container element
-        })
-        .catch(error => console.error('Error:', error));
-        initializechart();
-
         
+        container.innerHTML = "<canvas  id=\"myChart\">ccccccccccccccccccccccccccccccc</canvas>"
 
-//         let ctx = document.getElementById("myChart").getContext('2d');
-// // Create the chart
-// let myChart = new Chart(ctx, {
-//     type: 'bar',
-//     data: {
-//         labels: ['January', 'February', 'March', 'April', 'May'],
-//         datasets: [{
-//             label: 'Sales',
-//             data: [10, 20, 30, 40, 50],
-//             backgroundColor: 'rgba(255, 99, 132, 0.2)', // Bar color
-//             borderColor: 'rgba(255, 99, 132, 1)', // Border color
-//             borderWidth: 1
-//         },
-//     {
-//         label: 'loss',
-//             data: [60, 2, 31, 40, 50],
-//             backgroundColor: 'rgba(25, 99, 132, 0.2)', // Bar color
-//             borderColor: 'rgba(255, 99, 132, 1)', // Border color
-//             borderWidth: 1
-//     }]
-//     },
-//     options: {
-//         scales: {
-//             yAxes: [{
-//                 ticks: {
-//                     beginAtZero: true
-//                 }
-//             }]
-//         }
-//     }
-// });
+            let chart = document.getElementById("myChart")
+                     chart.getContext('2d');
+
+                    // Create the chart
+                    var myChart = new Chart(chart, {
+                        type: 'bar',
+                        data: {
+                            labels: ['January', 'February', 'March', 'April', 'May','june','july','august','september','october','November','December'],
+                            datasets: [{
+                                label: 'FootBall requests',
+                                data: [<?php echo json_encode($football_requests); ?>  ],
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)', // Bar color
+                                borderColor: 'rgba(255, 99, 132, 1)', // Border color
+                                borderWidth: 1
+                            },
+                        {
+                            label: 'Basketball requests',
+                            data: [<?php echo json_encode($basketball_requests); ?>  ],
+                                backgroundColor: 'rgba(25, 99, 132, 0.2)', // Bar color
+                                borderColor: 'rgba(255, 99, 132, 1)', // Border color
+                                borderWidth: 1
+                        },
+                        {
+                            label: 'pingpong requests',
+                            data: [<?php echo json_encode($pingpong_requests); ?>  ],
+                                backgroundColor: 'rgba(115, 49, 132, 0.2)', // Bar color
+                                borderColor: 'rgba(255, 99, 132, 1)', // Border color
+                                borderWidth: 1
+                        }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                // }
+                // initializechart();
+                chart.style.display = "block"
+
 
     };
         
@@ -111,6 +137,7 @@
     
     
     function showActivities() {
+        // chart.style.display = "none"
     //     fetch('/get-borrows')
     // .then(response => response.json())
     // .then(data=> {console.log(data);
@@ -137,16 +164,21 @@
         .catch(error => console.error('Error:', error));
 
     };
-
+});
 
 </script>
 
 
-{{-- <h2>{{$user->'pname'}}</h2> --}}
     
 @endsection
 
 <style>
+    #myChart{
+        /* display: none ; */
+        /* right: 550px; */
+        /* background-color: yellowgreen; */
+        width: 80%;
+    }
     .content{
         height: 500px;
         width:100%;

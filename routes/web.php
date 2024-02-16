@@ -9,6 +9,7 @@ use App\Http\Controllers\messagesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\individuaController;
 use App\Http\Controllers\material_borrowController;
+use App\Models\material_borrow;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,13 +32,18 @@ Route::get('/',[DashboardController::class,'index']);
 // });
 
 Route::get('/users', function () {
-    return view('usersview',['users'=> individuals::all()]);
+    return view('usersview',['users'=> individuals::all(),'borrows'=>material_borrow::all()]);
 });
+Route::get('/reLoad_filtered_Users', [individuaController::class,'filterANDreload']);
 
 
 Route::get('/users/{id}', function ($id) {
-    return view('user',['user'=> individuals::find($id)]);
+    return view('user',['user'=> individuals::find($id),
+                        'user_requests_data' => DB::select('select * from user_messages where requester_id = ? ', [$id]),
+                        'borrows'=>material_borrow::all()]
+                    );
 });
+
 
 
 
@@ -84,3 +90,4 @@ Route::get('/get-data/{request_id}', function($request_id) {
 
     return response()->json($requester);
 })->name('get_requester_id');
+

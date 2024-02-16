@@ -59,7 +59,7 @@
             $.get(`/load-UsermsgBoxAJAX/${id}`, function(response) {
                 $('#messages').html(response.component);
             });
-            initializeUsermessagesBox();
+            // initializeUsermessagesBox();
         };
 
 

@@ -31,6 +31,70 @@ function showActivities() {
     pop_up_div.style.left = request.offsetLeft + 'px';
 //     msg.off
 // // msg.appendChild
+let responses_saver = []
+var innerHTML = parentDiv.querySelector("span").innerHTML;
+m
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+function filter_request() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/reLoad_filtered_Users');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Request successful
+                var htmlResponse = xhr.responseText; // HTML content returned from the server
+                // Manipulate the HTML or insert it into the DOM
+                users_data_div.innerHTML = htmlResponse;
+            } else {
+                console.error('Error:', xhr.status);
+                // Handle error, if needed
+            }
+        }
+    };
+    //get checkings 
+    xhr.send(JSON.stringify(
+        { 
+            genders: arr[2] ,
+            years:arr[3] ,
+            branches:arr[1] ,
+            borrowings:arr[0],
+        }));
+    
+}
+
+let male_checker = document.getElementById("male")
+let users_data_div = document.getElementById("users_data_div")
+male_checker.addEventListener("change" , function(){
+    if (this.checked) {
+        users_data_div.innerHTML = ""
+
+        // fetch('/get-borrows-html')
+        // .then(response => response.text()) // Parse the response as text
+        // .then(html => {
+        //     // let container = document.getElementById("container");
+        //     users_data_div.innerHTML = html; // Set the HTML content to the container element
+        // })
+        // .catch(error => console.error('Error:', error));
+
+        filter_request()
+
+
+        
+    } else {
+        
+    }
+})
+let arr=[];
+let checkbox_set = document.querySelectorAll(".CheckBox."+checkbox_set_classer)
+checkbox_set.forEach(checkbox => {
+    if (checkbox.checked) {
+        arr.push(Number.isFinite(parseInt(checkbox.value)) ? parseInt(checkbox.value) : checkbox.value)
+    }
+})
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// responses_saver.push()
 
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

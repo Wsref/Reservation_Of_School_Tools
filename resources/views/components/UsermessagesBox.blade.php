@@ -8,10 +8,20 @@
 
 @foreach ($chatData as $msg)
     <div class="owner_{{$msg->owner}} a{{$msg->status}}" id="{{$msg->request_id ? $msg->request_id : $msg->replies_to_request_id}}" >
-    {{$msg->msg}}
-    <div class="spacer"></div>
+        <span class="msg" id="msg_id">{{$msg->msg}}</span>
+        <div class="spacer"></div>
     </div>
 @endforeach
+<div class="msgMenu" id="msgMenu_div">
+    <div class="responsesLoader" id="responsesLoader_div">
+    </div>
+    <div class="buttons">
+        <button class="Cancelall" id="Cancelall_btn">Cancel All</button>
+        <button class="sendBtn" id="send_btn"> Send</button>
+    </div>
+
+</div>
+
 
 {{-- <h1 class="user">hi it's {{$user['pname']}} mesg box </h1> --}}
 
@@ -181,16 +191,115 @@
         width: 60px;
         background-color: rgb(58, 58, 93);
     }
-    .responses_hoster_div{
-        /* display: none; */
+    .buttons{
+        display: flex;
+        flex-direction: column;
+    }
+    .Cancelall{
+        /* background-color: red; */
+        text-align: center ;
+        width: 100px ;
+        border-radius: 11px;
+
+        /* display:block; */
+        /* display:none; */
     position: absolute;
     bottom: 0;
-    left: 50%; /* Center horizontally */
+    right: 22%; /*Center horizontally*/
+    bottom: 10%;
+    /* transform: translateX(-50%); Center horizontally */
+    background-color: rgb(29, 29, 29);
+    color: aliceblue ;
+    border: 1px solid black;
+    padding: 10px;
+
+    }
+    .sendBtn{
+        
+        text-align: center ;
+        width: 100px ;
+        border-radius: 11px;
+
+        /* display:block; */
+        /* display:none; */
+        position: absolute;
+        bottom: 0;
+        right: 22%; /*Center horizontally*/
+        /* transform: translateX(-50%); Center horizontally */
+        background-color: white;
+        color: black;
+        border: 1px solid black;
+        padding: 10px;
+
+    }
+    .responsesLoader{
+        background-color: red;
+        border-radius: 8px;
+        width: 600px;
+        height: auto;
+        overflow: hidden ;
+        /* overflow: hidden; */
+        /* display:block; */
+        /* display:none; */
+        display: flex ;
+        flex-direction: column ;
+    position: absolute;
+    bottom: 0;
+    left: 22%; /*Center horizontally*/
     /* transform: translateX(-50%); Center horizontally */
     background-color: white;
     border: 1px solid black;
     padding: 10px;
     }
+    .responsesLoader:hover{
+        overflow: auto;
+    }
+    .msgMenu{
+        /* display: none; */
+        background-color: yellowgreen;
+    }
+    .response_of_msgmenu{
+        /* background-color: blue;
+        display: flex;
+        flex-direction: row ; */
+
+        display: flex;
+        justify-content: space-between; /* Align children at each end */
+        align-items: center; /* Center children vertically */
+        width: 100%; /* Full width of the parent */
+        height: auto; 
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid black;
+        background-color: rgb(255, 255, 255); /* Just for visualization */
+    }
+    .request_box , .status_box  ,.dropReason_box {
+        flex: 1; /* Equal width for left divs */
+    text-align: left; /* Align text to the left */
+    }
+    .dropReason_box{
+        padding: 2px;
+        background-color: white;
+    }
+    .cancelBtn_inMsgLoaderDiv{
+        background-color: rgb(30, 29, 29);
+        color: aliceblue;
+        border-radius: 10px;
+        border: 2px solid rgb(255, 255, 255);
+        transition: background-color 0.2s;
+        flex-shrink: 0; /* Prevent the div from shrinking */
+        text-align: right; /* Align text to the right */
+    }
+    .cancelBtn_inMsgLoaderDiv:hover{
+        background-color: wheat;
+    }
+    #confirmed_status_box{
+        color: rgb(53, 222, 53);
+    }
+    #droped_status_box{
+        color: rgb(229, 64, 64);
+    }
+    
 </style>
 
 {{-- 
@@ -283,15 +392,25 @@
 
  <script >    
     function initializeUsermessagesBox() {
-        let messagesdiv0 = document.getElementById("messages")
+        let messagesdiv = document.getElementById("messages")
         let responses_hoster_div = document.createElement("div")
         responses_hoster_div.className = "responses_hoster_div"
         responses_hoster_div.id = "unpoped"
 
 
+        let msgMenu_div = document.getElementById("msgMenu_div")
+        msgMenu_div.style.display = "none"
+        
+                let responsesLoader_div = document.getElementById("responsesLoader_div")
+                let Cancelall_btn = document.getElementById("Cancelall_btn")
+                let send_btn = document.getElementById("send_btn")
+
+        let responses_saver = []
 
        let not_replied_requests = document.querySelectorAll('.owner_user.a-1')
-       not_replied_requests.forEach(function(request) {
+       not_replied_requests.forEach(function(request) 
+        {
+           
            let request_id = request.id
    
            let confirmBtn = document.createElement("button")
@@ -308,22 +427,37 @@
 
            request.appendChild(dropBtn);
            request.appendChild(confirmBtn);
+
+
            
            confirmBtn.addEventListener("click",function()
             {
-                // if (responses_hoster_div.id === "unpoped") {
-                //     messagesdiv0.appendChild(responses_hoster_div)
-                //     responses_hoster_div.id = "poped"
-                    
-                // }
-                // responses_hoster_div.innerHTML= request.innerHTML + "||| Confirmed  ||| <br>"
-                // popup.innerHTML = '<input type="text" placeholder="Enter text"><button>Submit</button>';
                 request.removeChild(dropBtn)
 
                 let id = request_id; 
                 let confirmedupdate = 1 ;
-                let request_msg = request.innerHTML ;
+                
+                let request_msg =  request.querySelector("span").innerHTML;
                 let requester_id;
+
+                let confirmed_label = document.createElement("label")
+                confirmed_label.innerHTML = "Confirmed"
+                confirmed_label.className = "confirmedLabel"
+        
+                request.removeChild(confirmBtn)
+                request.appendChild(confirmed_label);
+
+
+
+
+
+                if (msgMenu_div.style.display === "none") 
+                {
+                    msgMenu_div.style.display = "block";
+                }
+                // let response_of_msgmenu = document.createElement("div")
+                // response_of_msgmenu.className = "response_of_msgmenu"
+
 
 
                 async function getRequesterId(id) {
@@ -336,6 +470,8 @@
 
                         });
 
+                        
+
                         console.log(response);
 
                         
@@ -346,33 +482,99 @@
                         requester_id = requesterId
                   
 
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('PUT', '/update/' + id);
-                        xhr.setRequestHeader('Content-Type', 'application/json');
-                        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === XMLHttpRequest.DONE) {
-                                if (xhr.status === 200) {
-                                    console.log('Update successful');
-                                    alert('confirm request id' + id +' successful')
-                                    // Handle success, if needed
-                                } else {
-                                    console.error('Error:', xhr.status);
-                                    alert('confirm request id' + id +' UNsuccesful')
-                                    // Handle error, if needed
-                                }
-                            }
-                        };
                         let emptystring = null
-                        console.log("requester_id 2  :::::::: "+requester_id)
-                        xhr.send(JSON.stringify(
-                            { 
-                                updateValue: confirmedupdate ,
-                                request_msg:request_msg ,
-                                requester_id:requester_id ,
-                                request_id:id,
-                                reply_msg : emptystring
-                            }));
+
+                        let data_arr = [request_id , requester_id , confirmedupdate , request_msg , emptystring ]
+                            responses_saver.push(data_arr)
+
+                            let response_of_msgmenu = document.createElement("div")
+                            response_of_msgmenu.className = "response_of_msgmenu"
+                            // response_of_msgmenu.id =
+
+                                let request_box = document.createElement("div")
+                                request_box.className = "request_box" 
+                                request_box.innerHTML = request_msg
+
+                                let status_box = document.createElement("div")
+                                status_box.className = "status_box"
+                                status_box.id = "confirmed_status_box"
+                                status_box.innerHTML = "Confirmed"
+
+                                let dropReason_box = document.createElement("div")
+                                dropReason_box.className = "dropReason_box" 
+                                dropReason_box.innerHTML = ""
+
+                                let cancelBtn_inMsgLoaderDiv = document.createElement("button")
+                                cancelBtn_inMsgLoaderDiv.innerHTML = "Cancel"
+                                cancelBtn_inMsgLoaderDiv.className = "cancelBtn_inMsgLoaderDiv"
+
+                            response_of_msgmenu.appendChild(request_box)
+                            response_of_msgmenu.appendChild(status_box)
+                            response_of_msgmenu.appendChild(dropReason_box)
+                            response_of_msgmenu.appendChild(cancelBtn_inMsgLoaderDiv)
+                            
+
+                            responsesLoader_div.appendChild(response_of_msgmenu)
+
+                            cancelBtn_inMsgLoaderDiv.addEventListener("click",function()
+                            {
+                                responses_saver = responses_saver.filter(function(array) {
+                                        // Return true for arrays that are not equal to the array to remove
+                                        return !array.every((value, index) => value === data_arr[index]);
+                                    });
+                                    console.log("responses_saver array after cancel ",responses_saver)
+                                responsesLoader_div.removeChild(response_of_msgmenu)
+                                request.removeChild(confirmed_label)
+                                request.appendChild(dropBtn)
+                                request.appendChild(confirmBtn)
+
+                                let childDivs = responsesLoader_div.getElementsByTagName("div");
+                                let numChildDivs = childDivs.length;
+
+                                // Perform an action if there are no child div elements
+                                if (numChildDivs === 0) {
+                                    console.log("No div elements found inside the parent div.");
+                                    msgMenu_div.style.display = "none"
+
+                                }
+                            })
+
+
+
+
+
+
+
+
+
+
+                        // var xhr = new XMLHttpRequest();
+                        // xhr.open('PUT', '/update/' + id);
+                        // xhr.setRequestHeader('Content-Type', 'application/json');
+                        // xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                        // xhr.onreadystatechange = function() {
+                        //     if (xhr.readyState === XMLHttpRequest.DONE) {
+                        //         if (xhr.status === 200) {
+                        //             console.log('Update successful');
+                        //             alert('confirm request id  ' + id +' successful')
+                        //             // Handle success, if needed
+                        //         } else {
+                        //             console.error('Error:', xhr.status);
+                        //             alert('confirm request id ' + id +' UNsuccesful')
+                        //             // Handle error, if needed
+                        //         }
+                        //     }
+                        // };
+                        // // let emptystring = null
+                        // console.log("requester_id 2  :::::::: "+requester_id)
+                        // xhr.send(JSON.stringify(
+                        //     { 
+                        //         updateValue: confirmedupdate ,
+                        //         request_msg:request_msg ,
+                        //         requester_id:requester_id ,
+                        //         request_id:id,
+                        //         reply_msg : emptystring
+                        //     }));
                         console.log("confirm button of id :"+confirmBtn.id+" was clicked")
 
 
@@ -388,13 +590,9 @@
                 getRequesterId(id)
 
             }
-        )
+            )
 
    
-
-
-
-
             dropBtn.addEventListener("click",function()
             {
                 // if (responses_hoster_div.id === "unpoped") {
@@ -403,12 +601,25 @@
                     
                 // }
                 // responses_hoster_div.innerHTML= request.innerHTML + "||| Droped  <br>|||"
+
                 request.removeChild(confirmBtn)
 
                 let id = request_id; 
                 let dropedupdate = 0 ; 
-                let request_msg = request.innerHTML ;
+                let request_msg = request.querySelector("span").innerHTML ;
                 let requester_id;
+
+                let droped_label = document.createElement("label")
+                droped_label.innerHTML = "Droped"
+                droped_label.className = "dropedLabel"
+        
+                request.removeChild(dropBtn)
+                request.appendChild(droped_label);
+
+                if (msgMenu_div.style.display === "none") 
+                {
+                    msgMenu_div.style.display = "block";
+                }
 
                 async function getRequesterIddrop(id) 
 		        {   
@@ -448,21 +659,22 @@
                     pop_up_div.append(OKbtn)
                     let messagesdiv = document.getElementById("messages")
 
-                    // messagesdiv.insertBefore(pop_up_div , request.nextSibling)
                     messagesdiv.appendChild(pop_up_div)
-                    // pop_up_div.style.left = request.offsetLeft + 'px';
-                    // pop_up_div.style.top = request.offsetTop + request.offsetHeight + 'px';
+
                     var popupWidth = pop_up_div.offsetWidth;
                     var parentWidth = messagesdiv.offsetWidth;
                     pop_up_div.style.left = (request.offsetLeft + request.offsetWidth - popupWidth) + 'px';
                     pop_up_div.style.top = request.offsetTop + request.offsetHeight + 'px';
 
-                    console.log(pop_up_textfield.innerHTML)
+                    console.log(pop_up_textfield.value)
 
 
                     cancelBtn.addEventListener("click",function(){
+                        request.removeChild(droped_label)
                         messagesdiv.removeChild(pop_up_div)
                         request.removeChild(cancelBtn)
+
+                        request.appendChild(dropBtn)
                         request.appendChild(confirmBtn)
                     })
                     
@@ -470,48 +682,106 @@
                     OKbtn.addEventListener("click",function()
                     {
                         messagesdiv.removeChild(pop_up_div)
+                        request.removeChild(cancelBtn)
+                        
 
 
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('PUT', '/update/' + id);
-                        xhr.setRequestHeader('Content-Type', 'application/json');
-                        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-                        xhr.onreadystatechange = function() {
-                            if (xhr.readyState === XMLHttpRequest.DONE) {
-                                if (xhr.status === 200) {
-                                    console.log('Update successful');
-                                    alert('drop request id' + id +' successful')
-                                    // Handle success, if needed
-                                } else {
-                                    console.error('Error:', xhr.status);
-                                    alert('drop request id' + id +' UNsuccesful')
-                                    // Handle error, if needed
+                        // responses_saver.push([request_id , requester_id , dropedupdate , request_msg , pop_up_textfield.innerHTML ])
+
+                        let data_arr = [request_id , requester_id , dropedupdate , request_msg , pop_up_textfield.value ]
+                            responses_saver.push(data_arr)
+
+                            let response_of_msgmenu = document.createElement("div")
+                            response_of_msgmenu.className = "response_of_msgmenu"
+                            // response_of_msgmenu.id =
+
+                                let request_box = document.createElement("div")
+                                request_box.className = "request_box" 
+                                request_box.innerHTML = request_msg
+
+                                let status_box = document.createElement("div")
+                                status_box.className = "status_box"
+                                status_box.id = "droped_status_box"
+                                status_box.innerHTML = "Droped"
+
+                                let dropReason_box = document.createElement("div")
+                                dropReason_box.className = "dropReason_box" 
+                                dropReason_box.innerHTML = pop_up_textfield.value
+
+                                let cancelBtn_inMsgLoaderDiv = document.createElement("button")
+                                cancelBtn_inMsgLoaderDiv.innerHTML = "Cancel"
+                                cancelBtn_inMsgLoaderDiv.className = "cancelBtn_inMsgLoaderDiv"
+
+                            response_of_msgmenu.appendChild(request_box)
+                            response_of_msgmenu.appendChild(status_box)
+                            response_of_msgmenu.appendChild(dropReason_box)
+                            response_of_msgmenu.appendChild(cancelBtn_inMsgLoaderDiv)
+
+                            responsesLoader_div.appendChild(response_of_msgmenu)
+
+                            cancelBtn_inMsgLoaderDiv.addEventListener("click",function()
+                            {
+                                responses_saver = responses_saver.filter(function(array) {
+                                        // Return true for arrays that are not equal to the array to remove
+                                        return !array.every((value, index) => value === data_arr[index]);
+                                    });
+                                    console.log("responses_saver array after cancel ",responses_saver)
+                                responsesLoader_div.removeChild(response_of_msgmenu)
+                                request.removeChild(droped_label)
+                                request.appendChild(dropBtn)
+                                request.appendChild(confirmBtn)
+
+                                let childDivs = responsesLoader_div.getElementsByTagName("div");
+                                let numChildDivs = childDivs.length;
+
+                                // Perform an action if there are no child div elements
+                                if (numChildDivs === 0) {
+                                    console.log("No div elements found inside the parent div.");
+                                    msgMenu_div.style.display = "none"
+
                                 }
-                            }
-                        };
-                        console.log(pop_up_textfield.innerHTML)
+                            })
 
-                        xhr.send(JSON.stringify(
-                            { 
-                                updateValue : dropedupdate ,
-                                request_msg : request_msg ,
-                                requester_id : requester_id ,
-                                request_id : id,
-                                reply_msg : pop_up_textfield.innerHTML
-                            }));
+
+
+
+
+                        // var xhr = new XMLHttpRequest();
+                        // xhr.open('PUT', '/update/' + id);
+                        // xhr.setRequestHeader('Content-Type', 'application/json');
+                        // xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                        // xhr.onreadystatechange = function() {
+                        //     if (xhr.readyState === XMLHttpRequest.DONE) {
+                        //         if (xhr.status === 200) {
+                        //             console.log('Update successful');
+                        //             alert('drop request id' + id +' successful')
+                        //             // Handle success, if needed
+                        //         } else {
+                        //             console.error('Error:', xhr.status);
+                        //             alert('drop request id' + id +' UNsuccesful')
+                        //             // Handle error, if needed
+                        //         }
+                        //     }
+                        // };
+                        // console.log(pop_up_textfield.innerHTML)
+
+                        // xhr.send(JSON.stringify(
+                        //     { 
+                        //         updateValue : dropedupdate ,
+                        //         request_msg : request_msg ,
+                        //         requester_id : requester_id ,
+                        //         request_id : id,
+                        //         reply_msg : pop_up_textfield.innerHTML
+                        //     }));
 
                         
 
                     }
                     )
 
+                    console.log("drop button of id :"+confirmBtn.id+" was clicked")
 
-
-                        console.log("drop button of id :"+confirmBtn.id+" was clicked")
-
-
-
-                        
+    
                     } catch (error) {
                         console.error(error);
                         throw error; // Rethrow the error to the caller
@@ -521,14 +791,61 @@
 
 
             }
-        )
+            )
 
    
            
            // console.log(request);
-       });
+        });
+
+
+        send_btn.addEventListener("click",function(){
+            responses_saver.forEach(arr => 
+            {
+                // let data_arr = [request_id , requester_id , confirmedupdate , request_msg , emptystring ]
+                console.log("request id ",arr[0])
+                console.log("requester_id ",arr[1])
+                console.log("update value ",arr[2])
+                console.log("request_msg ",arr[3])
+                console.log("drop reason if exist ",arr[4])
+                console.log("")
+
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('PUT', '/update/' + arr[0]);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                        xhr.onreadystatechange = function() {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    console.log('Update successful');
+                                    alert('confirm request id  ' + arr[0] +' successful')
+                                    // Handle success, if needed
+                                } else {
+                                    console.error('Error:', xhr.status);
+                                    alert('confirm request id ' + arr[0] +' UNsuccesful')
+                                    // Handle error, if needed
+                                }
+                            }
+                        };
+                        // let emptystring = null
+                        console.log("requester_id 2  :::::::: "+arr[1])
+                        xhr.send(JSON.stringify(
+                            { 
+                                updateValue: arr[2] ,
+                                request_msg:arr[3] ,
+                                requester_id:arr[1] ,
+                                request_id:arr[0],
+                                reply_msg : arr[4]
+                            }));
+
+                            responsesLoader_div.innerHTML= ""
+                            msgMenu_div.style.display = "none"
+                
+            })
+        })
    
-       let dropped_requests = document.querySelectorAll('.owner_user.a0')
+       
+        let dropped_requests = document.querySelectorAll('.owner_user.a0')
        dropped_requests.forEach(function(request) {
            let request_id = request.id 
    

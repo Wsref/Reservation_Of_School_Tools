@@ -1,5 +1,6 @@
-@props(['user'])
+@props(['users','borrows'])
 
+@foreach ($users as $user)
 <a href="/users/{{$user['id']}}">
     <div class="table-row">
         <div class="table-cell">{{$user['fname']}}</div>
@@ -9,6 +10,7 @@
         <div class="table-cell">none</div>
     </div>
 </a>
+@endforeach
 
 <style>
         a {

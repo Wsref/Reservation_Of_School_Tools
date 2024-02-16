@@ -6,7 +6,7 @@
  
 <script>
      function initializechart() {
-    Get the canvas element
+    
     var ctx = document.getElementById("myChart").getContext('2d');
 
     // Create the chart
