@@ -11,12 +11,16 @@
     @yield('title')
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+<<<<<<< HEAD
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
+=======
+>>>>>>> 959dee0 (our principal project)
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <!-- CSS Files -->
+<<<<<<< HEAD
 <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/now-ui-dashboard.css?v=1.5.0') }}" rel="stylesheet" />
 <link href="{{ asset('assets/css/costum.css') }}" rel="stylesheet" />
@@ -26,14 +30,23 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   {{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> --}}
+=======
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/now-ui-dashboard.css?v=1.5.0" rel="stylesheet" />
+  <link href="../assets/css/costum.css" rel="stylesheet" />
+  @yield('style')
+>>>>>>> 959dee0 (our principal project)
 </head>
 
 <body class="">
   <div class="wrapper ">
     <div class="sidebar" data-color="blue">
+<<<<<<< HEAD
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
+=======
+>>>>>>> 959dee0 (our principal project)
       <div class="logo">
         <a href="#" class="simple-text logo-mini">
           EE
@@ -45,11 +58,16 @@
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
           <li>
+<<<<<<< HEAD
             <a href="./dashboard.html">
+=======
+            <a href="{{ url('/admin') }}" >
+>>>>>>> 959dee0 (our principal project)
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
             </a>
           </li>
+<<<<<<< HEAD
           <li>
             <a href="./icons.html">
               <i class="now-ui-icons education_atom"></i>
@@ -65,13 +83,46 @@
           <li>
             <a href="./notifications.html">
               <i class="now-ui-icons ui-1_bell-53"></i>
+=======
+          <li> 
+              <a role="button" data-bs-toggle="dropdown" >
+                <i class="now-ui-icons ui-1_calendar-60"></i>
+                Reservations
+              </a>      
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url('/reservationTerain') }}">Reservations Terain</a>
+                <a class="dropdown-item" href="{{ url('/reservationMateriel') }}">Reservations Matériel</a>
+              </div>      
+          </li>
+          <li>
+            <a href="{{ url('/materiel_est') }}" >
+              <i class="now-ui-icons shopping_box"></i>
+              <p>Matériels</p>
+            </a>
+          </li>
+          <li>
+            <a href="#" >
+              <i class="now-ui-icons sport_trophy"></i>
+              <p>Evenements</p>
+            </a>
+          </li>
+          <li>
+            <a href="#" >
+              <i class="now-ui-icons ui-1_bell-53" ></i>
+>>>>>>> 959dee0 (our principal project)
               <p>Notifications</p>
             </a>
           </li>
           <li class="">
+<<<<<<< HEAD
             <a href="./user.html">
               <i class="now-ui-icons users_single-02"></i>
               <p>Utilisateur</p>
+=======
+            <a href="{{ url('/users_est') }}" >
+              <i class="now-ui-icons users_single-02"></i>
+              <p>Utilisateurs</p>
+>>>>>>> 959dee0 (our principal project)
             </a>
           </li>
         
@@ -80,7 +131,11 @@
     </div>
     <div class="main-panel" id="main-panel">
       <!-- Navbar -->
+<<<<<<< HEAD
       <nav class="navbar navbar-expand-lg navbar-transparent bg-info  navbar-absolute">
+=======
+      <nav class="navbar navbar-expand-lg navbar-transparent  bg-info  navbar-absolute">
+>>>>>>> 959dee0 (our principal project)
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <div class="navbar-toggle">
@@ -92,7 +147,11 @@
             </div>
             <a class="navbar-brand" href="#">Esport</a>
           </div>
+<<<<<<< HEAD
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+=======
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+>>>>>>> 959dee0 (our principal project)
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -100,6 +159,7 @@
           <div class="collapse navbar-collapse justify-content-end" id="navigation">
             <form>
               <div class="input-group no-border">
+<<<<<<< HEAD
                 <input type="text" value="" class="form-control" placeholder="Search...">
                 <div class="input-group-append">
                   <div class="input-group-text">
@@ -138,12 +198,27 @@
                   </p>
                 </a>
               </li>
+=======
+                <input type="text" value="" class="form-control" placeholder="Recherche..." id="search">
+              </div>
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#pablo">
+                    <i class="now-ui-icons users_single-02"></i>
+                    <p>
+                      <span class="d-lg-none d-md-block">Account</span>
+                    </p>
+                  </a>
+                </li>
+>>>>>>> 959dee0 (our principal project)
             </ul>
           </div>
         </div>
       </nav>
       <!-- End Navbar -->
       <div class="panel-header panel-header-sm">
+<<<<<<< HEAD
       </div>
       <div class="content" style="padding-left: 5px;padding-right:5px;">
          @yield('content')
@@ -200,6 +275,34 @@
 
 
 
+=======
+      </div> 
+      <div class="content">
+
+
+
+            @yield('content')
+            {{-- Content dyalna ghaykon hna--}}
+
+
+
+      </div>
+    </div>
+  </div>
+  
+  <script src="../assets/js/core/jquery.min.js"></script>
+  <script src="../assets/js/core/popper.min.js"></script>
+  <script src="../assets/js/core/bootstrap.min.js"></script>
+  <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="../assets/js/plugins/bootstrap-notify.js"></script>
+  <script src="../assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <script src="../assets/demo/demo.js"></script>
+
+  @yield('scripts')
+ 
+  
+>>>>>>> 959dee0 (our principal project)
 </body>
 
 </html>
