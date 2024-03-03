@@ -25,7 +25,7 @@ class user_messagesFactory extends Factory
             // $table->time('request_time');
             // $table->timestamp('request_timestamp');
             //
-            'requester_id' => fake()->numberBetween($min = 11, $max = 11),
+            'requester_id' => fake()->numberBetween($min = 1, $max = 10),
             'request_msg' => fake()->text(30),
             'request_status' => fake()->randomElement([0,1,-1]),
             'request_date' => fake()->date(),

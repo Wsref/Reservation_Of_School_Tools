@@ -29,10 +29,10 @@
                 {{-- to add curently --}}
             </div>
             <div class="content" id="container">
-                <x-userBorrow :borrows="$borrows"/>
+                <x-userBorrow :borrows="$borrows" :Mat_reservs="$Mat_reservs"/>
                 {{-- <canvas style="background-color: rgb(255, 255, 255)" id="myChart"></canvas> --}}
                 {{-- <x-userborrowcharts :borrows="$user" /> --}}
-
+ 
             </div>
         </div>
     </div>
@@ -46,14 +46,14 @@ $monthsBKB = ['1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0,'8'=>0,'9'=>0,'10
 $monthsPGP = ['1'=>0,'2'=>0,'3'=>0,'4'=>0,'5'=>0,'6'=>0,'7'=>0,'8'=>0,'9'=>0,'10'=>0,'11'=>0,'12'=>0];
 
 
-foreach ($borrows as $borrow ) {
-    if ($borrow['userId'] == $user['id']) {
+foreach ($Mat_reservs as $reserve ) {
+    if ($reserve->user_id == $user['id'] && substr($reserve->date_reserve, 0, 4 ) === "2024") {
 
         foreach ($monthsFTB as $monthnum=>$requests) 
         {
-            if (date('m', strtotime($borrow['dateBorrow'])) == $monthnum) 
+            if (date('m', strtotime($reserve->date_reserve)) == $monthnum) 
             {
-                if ($borrow['material'] == "FootBall") {
+                if ($reserve->materiels->name == "FootBall") {
                     // $requests++;
                     $monthsFTB[$monthnum]++;
                     $football_requests++ ;
@@ -64,9 +64,9 @@ foreach ($borrows as $borrow ) {
 
         foreach ($monthsBKB as $monthnum=>$requests) 
         {
-            if (date('m', strtotime($borrow['dateBorrow'])) == $monthnum) 
+            if (date('m', strtotime($reserve->date_reserve)) == $monthnum) 
             {
-                if ($borrow['material'] == "BasketBall") {
+                if ($reserve->materiels->name == "BasketBall") {
                     // $requests++;
                     $monthsBKB[$monthnum]++;
                     $basketball_requests++ ;
@@ -77,9 +77,9 @@ foreach ($borrows as $borrow ) {
 
         foreach ($monthsPGP as $monthnum=>$requests) 
         {
-            if (date('m', strtotime($borrow['dateBorrow'])) == $monthnum) 
+            if (date('m', strtotime($reserve->date_reserve)) == $monthnum) 
             {
-                if ($borrow['material'] == "Ping-Pong") {
+                if ($reserve->materiels->name == "Ping-Pong") {
                     // $requests++;
                     $monthsPGP[$monthnum]++;
                     $pingpong_requests++ ;
@@ -131,7 +131,7 @@ foreach ($borrows as $borrow ) {
 
                     // Create the chart
                     var myChart = new Chart(chart, {
-                        type: 'line',
+                        type: 'bar',
                         data: {
                             labels: ['January', 'February', 'March', 'April', 'May','june','july','august','september','october','November','December'],
                             datasets: [{
@@ -252,7 +252,8 @@ foreach ($borrows as $borrow ) {
 
     // userComponent.style.display = "none";
 
-    fetch('/get-borrows-html')
+let id = <?php echo json_encode($user['id']); ?> ;
+    fetch(`/get-borrows-html/${id}`)
         .then(response => response.text()) // Parse the response as text
         .then(html => {
             let container = document.getElementById("container");

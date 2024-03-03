@@ -7,8 +7,12 @@
 @endif --}}
 
 @foreach ($chatData as $msg)
-    <div class="owner_{{$msg->owner}} a{{$msg->status}}" id="{{$msg->request_id ? $msg->request_id : $msg->replies_to_request_id}}" >
-        <span class="msg" id="msg_id">{{$msg->msg}}</span>
+    <div class="owner_{{$msg->owner}} a{{$msg->status}}" id="{{$msg->id ? $msg->id : $msg->replies_to_request_id}}" >
+        <div class="spanContainer">
+            <span class="msg" id="msg_id">{{$msg->msg}}</span>
+            <span class="dropReason"></span>
+        </div>
+
         <div class="spacer"></div>
     </div>
 @endforeach
@@ -22,48 +26,30 @@
 
 </div>
 
-
-{{-- <h1 class="user">hi it's {{$user['pname']}} mesg box </h1> --}}
-
-{{-- @foreach ($msgdata as $msg)
-    <div class="{{$msg->the_sender}}msg" >  
-        {{$msg->msg}}
-        <div class="statusBtns">
-            {{-- <button></button> --}}
-        {{-- </div>
-        <label for=""> {{$msg->msg_time}} </label> 
-    </div>
-@endforeach  --}} 
-
-
-
-
-{{-- <style>
-    .usermsg , .adminmsg{
-        padding: 5px;
-        background-color:rgb(178, 179, 181);
-        border-radius: 5px;
-        border-bottom: 0.6px solid black;
-
-    }
-    .usermsg{
-        background-color: rgb(72, 72, 72);
-        color: white;
-        margin-right: 30px;
-
-    }
-    .adminmsg{
-        background-color: rgb(230, 210, 210) ;
-        margin-left: 30px;
-    }
-    label{
-        font-size: 10px;
-        /* font: small; */
-        color: red;
-    }
-</style> --}}
-
 <style>
+.spanContainer {
+    display: flex; /* Align spans horizontally */
+    /* justify-content: space-between; */
+    /* background-color: violet; */
+    flex-grow: 1;
+}
+
+.msg {
+     /* Equal width for both spans */
+    /* background-color: #f2f2f2; */
+    /* padding: 10px; */
+    width: 150px;
+    border-radius: 5px;
+}
+
+.dropReason {
+     /* Equal width for both spans */
+    /* background-color: #f2f2f2; */
+    /* padding: 10px; */
+    border-radius: 5px;
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1); /* Shadow in bottom and left */
+}
+
     .spacer {
     flex-grow: 1; /* This will push the buttons (or labels) to the rightmost part */
  }
@@ -93,6 +79,8 @@
             align-items: center; /* Center-align child elements vertically */
             justify-content: space-between;
             position: relative;
+
+            
 
 
         }
@@ -302,93 +290,6 @@
     
 </style>
 
-{{-- 
-<script>
- //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- //Uncaught DOMException: Failed to execute 'querySelector' on 'Document': '.user.-1' is not a valid selector.
-    document.addEventListener("DOMContentLoaded", function() {
-            // Your script code here
-   
-
-    let not_replied_requests = document.querySelectorAll('.owner_user.a-1')
-    not_replied_requests.forEach(function(request) {
-        let request_id = request.id
-
-        let confirmBtn = document.createElement("button")
-        confirmBtn.className = "confirmBtn" ;
-        confirmBtn.textContent = "Confirm";
-        confirmBtn.id = request_id ;
-
-        let dropBtn = document.createElement("button")
-        dropBtn.className = "dropBtn" ;
-        dropBtn.textContent = "Drop"; 
-        dropBtn.id = request_id ;
-
-        request.appendChild(dropBtn);
-        request.appendChild(confirmBtn);
-
-        // Do something with each element
-        // console.log(request);
-    });
-
-    let dropped_requests = document.querySelectorAll('.owner_user.a0')
-    dropped_requests.forEach(function(request) {
-        let request_id = request.id 
-
-        let droped_label = document.createElement("label")
-        droped_label.innerHTML = "Droped"
-        droped_label.className = "dropedLabel"
-
-        request.appendChild(droped_label);
-
-        
-    })
-
-    let confirmed_requests = document.querySelectorAll('.owner_user.a1')
-    confirmed_requests.forEach(function(request) {
-        let request_id = request.id 
-
-        let confirmed_label = document.createElement("label")
-        confirmed_label.innerHTML = "Confirmed"
-        confirmed_label.className = "confirmedLabel"
-
-        request.appendChild(confirmed_label);
-        
-        
-    })
-
-    // //!/======================================
-
-    let droped_replies = document.querySelectorAll('.owner_admin.a0')
-    droped_replies.forEach(function(request) {
-        let request_id = request.id 
-
-        let droped_label = document.createElement("label")
-        droped_label.innerHTML = "Droped"
-        droped_label.className = "dropedLabel"
-
-        request.appendChild(droped_label);
-        
-        
-        
-    })
-
-    let confirmed_replies = document.querySelectorAll('.owner_admin.a1')
-    confirmed_replies.forEach(function(request) {
-        let request_id = request.id 
-
-        let confirmed_label = document.createElement("label")
-        confirmed_label.innerHTML = "Confirmed"
-        confirmed_label.className = "confirmedLabel"
-        
-        request.appendChild(confirmed_label);
-        
-    })
-    });
-</script> --}}
-
-{{-- @if ($user_requests_data && $user_requests_data->requester_id) --}}
-
 
  <script >    
     function initializeUsermessagesBox() {
@@ -437,7 +338,7 @@
                 let id = request_id; 
                 let confirmedupdate = 1 ;
                 
-                let request_msg =  request.querySelector("span").innerHTML;
+                let request_msg =  request.querySelector(".msg").innerHTML;
                 let requester_id;
 
                 let confirmed_label = document.createElement("label")
@@ -465,7 +366,7 @@
                     {
                         // Make the AJAX request and wait for the response
                         const response = await $.ajax({
-                            url: '{{ route("get_requester_id", ["request_id" => ":parameter"]) }}'.replace(':parameter', id),
+                            url: '{{ route("get_requester_id2", ["request_id" => ":parameter"]) }}'.replace(':parameter', id),
                             method: 'GET'
 
                         });
@@ -475,7 +376,7 @@
                         console.log(response);
 
                         
-                        const requesterId = parseInt(response[0].requester_id);
+                        const requesterId = parseInt(response['user_id']);
                         console.log("requester_id 1: " + requesterId);
 
                         // Return the requester_id to the caller
@@ -539,42 +440,6 @@
                                 }
                             })
 
-
-
-
-
-
-
-
-
-
-                        // var xhr = new XMLHttpRequest();
-                        // xhr.open('PUT', '/update/' + id);
-                        // xhr.setRequestHeader('Content-Type', 'application/json');
-                        // xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-                        // xhr.onreadystatechange = function() {
-                        //     if (xhr.readyState === XMLHttpRequest.DONE) {
-                        //         if (xhr.status === 200) {
-                        //             console.log('Update successful');
-                        //             alert('confirm request id  ' + id +' successful')
-                        //             // Handle success, if needed
-                        //         } else {
-                        //             console.error('Error:', xhr.status);
-                        //             alert('confirm request id ' + id +' UNsuccesful')
-                        //             // Handle error, if needed
-                        //         }
-                        //     }
-                        // };
-                        // // let emptystring = null
-                        // console.log("requester_id 2  :::::::: "+requester_id)
-                        // xhr.send(JSON.stringify(
-                        //     { 
-                        //         updateValue: confirmedupdate ,
-                        //         request_msg:request_msg ,
-                        //         requester_id:requester_id ,
-                        //         request_id:id,
-                        //         reply_msg : emptystring
-                        //     }));
                         console.log("confirm button of id :"+confirmBtn.id+" was clicked")
 
 
@@ -606,7 +471,7 @@
 
                 let id = request_id; 
                 let dropedupdate = 0 ; 
-                let request_msg = request.querySelector("span").innerHTML ;
+                let request_msg = request.querySelector(".msg").innerHTML ;
                 let requester_id;
 
                 let droped_label = document.createElement("label")
@@ -626,14 +491,14 @@
                     try {
 
                         const response = await $.ajax({
-                            url: '{{ route("get_requester_id", ["request_id" => ":parameter"]) }}'.replace(':parameter', id),
+                            url: '{{ route("get_requester_id2", ["request_id" => ":parameter"]) }}'.replace(':parameter', id),
                             method: 'GET'
 
                         });
 
                         console.log(response);
 
-                        const requesterId = parseInt(response[0].requester_id);
+                        const requesterId = parseInt(response['user_id']);
                         console.log("requester_id 1: " + requesterId);
 
                         requester_id = requesterId
@@ -659,14 +524,33 @@
                     pop_up_div.append(OKbtn)
                     let messagesdiv = document.getElementById("messages")
 
-                    messagesdiv.appendChild(pop_up_div)
+                    
 
                     var popupWidth = pop_up_div.offsetWidth;
                     var parentWidth = messagesdiv.offsetWidth;
-                    pop_up_div.style.left = (request.offsetLeft + request.offsetWidth - popupWidth) + 'px';
-                    pop_up_div.style.top = request.offsetTop + request.offsetHeight + 'px';
 
+
+                    var viewportOffset = request.getBoundingClientRect();
+
+                    var leftOffset = viewportOffset.left + window.pageXOffset + 50;
+                    var topOffset = viewportOffset.bottom + window.pageYOffset +5 + 70;
+
+
+                    // var viewportOffset = request.getBoundingClientRect();
+                    // var leftOffset = viewportOffset.left + window.pageXOffset + request.offsetWidth - popupWidth;
+                    // var topOffset = viewportOffset.top + window.pageYOffset + request.offsetHeight;
+
+                    leftOffset -= messagesdiv.scrollLeft;
+
+                    pop_up_div.style.left = leftOffset + 'px';
+                    pop_up_div.style.top = topOffset  + 'px';
+
+                    messagesdiv.appendChild(pop_up_div)
+                    // document.body.appendChild(pop_up_div);
+
+                    
                     console.log(pop_up_textfield.value)
+                    // console.log("hola")
 
 
                     cancelBtn.addEventListener("click",function(){
@@ -751,41 +635,7 @@
 
                                 }
                             })
-
-
-
-
-
-                        // var xhr = new XMLHttpRequest();
-                        // xhr.open('PUT', '/update/' + id);
-                        // xhr.setRequestHeader('Content-Type', 'application/json');
-                        // xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-                        // xhr.onreadystatechange = function() {
-                        //     if (xhr.readyState === XMLHttpRequest.DONE) {
-                        //         if (xhr.status === 200) {
-                        //             console.log('Update successful');
-                        //             alert('drop request id' + id +' successful')
-                        //             // Handle success, if needed
-                        //         } else {
-                        //             console.error('Error:', xhr.status);
-                        //             alert('drop request id' + id +' UNsuccesful')
-                        //             // Handle error, if needed
-                        //         }
-                        //     }
-                        // };
-                        // console.log(pop_up_textfield.innerHTML)
-
-                        // xhr.send(JSON.stringify(
-                        //     { 
-                        //         updateValue : dropedupdate ,
-                        //         request_msg : request_msg ,
-                        //         requester_id : requester_id ,
-                        //         request_id : id,
-                        //         reply_msg : pop_up_textfield.innerHTML
-                        //     }));
-
                         
-
                     }
                     )
 
@@ -883,98 +733,130 @@
    
        // //!/======================================
    
-       let droped_replies = document.querySelectorAll('.owner_admin.a0')
-       droped_replies.forEach(function(request) {
-           let request_id = request.id 
-   
-           let droped_label = document.createElement("label")
-           droped_label.innerHTML = "Droped"
-           droped_label.className = "dropedLabel"
-   
-           async function getRequest(id) 
+       
+
+       async function getRequest() 
             {
                 try {
                         const response = await $.ajax({
-                            url: '{{ route("get_requester_id", ["request_id" => ":parameter"]) }}'.replace(':parameter', request_id),
+                            url:  '{{ route("get_requester_id") }}',
                             method: 'GET'
 
                         });
+                        return response; // Return the response variable
+                    } catch (error) {
+                        console.error('Error:', error);
+                        // Handle error if needed
+                        return null; // Return null or handle error accordingly
+                    }
+                }
+                getRequest()
+                .then(response => { 
+                    console.log('Response:', response);
 
-                        console.log(response);
+                    let droped_replies = document.querySelectorAll('.owner_admin.a0')
+                    droped_replies.forEach(function(request) 
+                    {
+                    let request_id = request.id 
+            
+                    let droped_label = document.createElement("label")
+                    droped_label.innerHTML = "Droped"
+                    droped_label.className = "dropedLabel"
+                    request.appendChild(droped_label)
+   
+
+                        let request_msg ="not yet";
+                        // console.log(request_id);
+                        // console.log(response);
+
+                        // console.log(response.request_msg)
+                        response.forEach(row_dict =>{
+                            // console.log(row_dict)
+                            // console.log("************************** "+row_dict['id'])
+                            // console.log(request_id)
+                            if (row_dict['id'] == request_id) {
+                                request_msg = row_dict['request_msg'];
+                                // console.log("************************** "+row_dict['request_msg'])
+                            }
+                        } )
+                        // console.log(request_msg)
 
                         // Extract the requester_id from the response
                         // const requesterId = parseInt(response[0].requester_id);
                         // console.log("requester_id 1: " + requesterId);
 
                         // requester_id = requesterId
-                        request.innerHTML = response[0].request_msg ;
-                        request.appendChild(droped_label)
+                        let reply = request.querySelector('.msg').innerHTML  
+                        request.querySelector('.msg').innerHTML = request_msg ;
+                        request.querySelector('.dropReason').innerHTML =  reply;
+
+                        // request.appendChild(droped_label)
                         
-                    } catch (error) {
-                        // Handle any errors
-                        console.error(error);
-                        throw error; // Rethrow the error to the caller
-                    }
-            }
-                getRequest(request_id)
+                        
+                    })
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        // request.appendChild(droped_label);
-           
-           
-           
-       })
-   
-       let confirmed_replies = document.querySelectorAll('.owner_admin.a1')
-       confirmed_replies.forEach(function(request) {
-           let request_id = request.id 
+                        let confirmed_replies = document.querySelectorAll('.owner_admin.a1')
+                        confirmed_replies.forEach(function(request) 
+                        {
+                        let request_id = request.id 
+                        console.log("owner_admin.a1  => "+request)
 
            
    
-           let confirmed_label = document.createElement("label")
-           confirmed_label.innerHTML = "Confirmed"
-           confirmed_label.className = "confirmedLabel"
-           
-        //    request.appendChild(confirmed_label);
+                        let confirmed_label = document.createElement("label")
+                        confirmed_label.innerHTML = "Confirmed"
+                        confirmed_label.className = "confirmedLabel"
+                        
+                        
+                        request.appendChild(confirmed_label)
 
-
-
-
-           async function getRequest(id) 
-            {
-                try {
-                        const response = await $.ajax({
-                            url: '{{ route("get_requester_id", ["request_id" => ":parameter"]) }}'.replace(':parameter', request_id),
-                            method: 'GET'
-
-                        });
 
                         // console.log(response);
 
                         // Extract the requester_id from the response
                         // const requesterId = parseInt(response[0].requester_id);
                         // console.log("requester_id 1: " + requesterId);
+                        let request_msg ="not yet";
+                        // console.log(request_id);
+                        // console.log(response);
+
+                        // console.log(response.request_msg)
+                        response.forEach(row_dict =>{
+                            // console.log(row_dict)
+                            // console.log("************************** "+row_dict['id'])
+                            // console.log(request_id)
+                            if (row_dict['id'] == request_id) {
+                                request_msg = row_dict['request_msg'];
+                                // console.log("************************** "+row_dict['request_msg'])
+                            }
+                        } )
+                        // console.log(request_msg)
 
                         // requester_id = requesterId
-                        request.innerHTML = response[0].request_msg ;
-                        request.appendChild(confirmed_label)
+                        let reply = request.querySelector('.msg').innerHTML  
+                        request.querySelector('.msg').innerHTML = request_msg ;
+                        request.querySelector('.dropReason').innerHTML =  reply;
                         
-                    } catch (error) {
-                        // Handle any errors
-                        console.error(error);
-                        throw error; // Rethrow the error to the caller
-                    }
-            }
-                getRequest(request_id)
-
-
-
-
-
-
-
-
+                    
            
-       })
+                    })
+           
+           
+           
+                
+
+
+                    
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    
+                });
+
+   
       //  });
     }
     initializeUsermessagesBox();

@@ -1,21 +1,27 @@
-@props(['borrows'])
+@props(['borrows','Mat_reservs'])
 
 
 <a href="">
     <div class="table-row" id="title">
         <div class="table-cell">Date</div>
         <div class="table-cell">Borrow</div>
+        <div class="table-cell">Quantity</div>
         <div class="table-cell">Time</div>
     </div>
 </a>
 
 
-@foreach($borrows as $borrow)
+@foreach($Mat_reservs as $reserve)
+
     <a href="">
         <div class="table-row">
-            <div class="table-cell">{{$borrow['dateBorrow']}}</div>
-            <div class="table-cell">{{$borrow['material']}}</div>
-            <div class="table-cell">{{$borrow['timeBorrow']}}</div>
+            <div class="table-cell">{{$reserve->date_reserve}}</div>
+            <div class="table-cell">{{$reserve->materiels->name}}</div>
+            <div class="table-cell">{{$reserve->quantite}}</div>
+            <div class="table-cell">@php
+                $time = (new DateTime($reserve->created_at))->format('H:i:s');
+            @endphp
+            {{ $time }}</div>
         </div>
     </a>
 @endforeach

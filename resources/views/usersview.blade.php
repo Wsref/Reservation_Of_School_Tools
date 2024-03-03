@@ -71,7 +71,7 @@
 
             <div class="users_data" id="users_data_div">
 
-              <x-user :users="$users" :borrows="$borrows"/>
+              <x-user :users="$users" :borrows="$borrows" :Mat_reservs="$Mat_reservs"/>
 
             </div>
 
@@ -79,7 +79,7 @@
     </div>
 
 </div>
-
+@endsection
 <style>
   a {
       color: inherit; /* Sets the color to inherit from the parent element */
@@ -182,26 +182,19 @@
 
 <script>
 
-
+document.addEventListener('DOMContentLoaded', function() {
   // let male_checker = document.getElementById("male")
   let users_data_div = document.getElementById("users_data_div")
 
-  var checkboxes = document.querySelectorAll(".CheckBox");
+  let checkboxes = document.querySelectorAll(".CheckBox");
 
 // Loop through each checkbox
 checkboxes.forEach(function(checkbox) {
 
   checkbox.addEventListener("change" , function(){
+    console.log("Checkbox change event triggered");
       if (this.checked) {
           users_data_div.innerHTML = ""
-
-          // fetch('/get-borrows-html')
-          // .then(response => response.text()) // Parse the response as text
-          // .then(html => {
-          //     // let container = document.getElementById("container");
-          //     users_data_div.innerHTML = html; // Set the HTML content to the container element
-          // })
-          // .catch(error => console.error('Error:', error));
 
           filter_request()
     
@@ -214,13 +207,28 @@ checkboxes.forEach(function(checkbox) {
 
   function filter_request() {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', '/reLoad_filtered_Users');
+
+      var url = '/reLoad_filtered_Users';
+      var queryParams = {
+        year: get_checkboxSet_status("year"),
+        branch: get_checkboxSet_status("branch"),
+        // Add other parameters as needed
+    };
+
+      var queryString = Object.keys(queryParams)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`)
+        .join('&');
+    if (queryString) {
+        url += '?' + queryString;
+    }
+      xhr.open('GET', url);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
       xhr.onreadystatechange = function() {
           if (xhr.readyState === XMLHttpRequest.DONE) {
               if (xhr.status === 200) {
                   // Request successful
+                  console.log(htmlResponse)
                   var htmlResponse = xhr.responseText; // HTML content returned from the server
                   // Manipulate the HTML or insert it into the DOM
                   users_data_div.innerHTML = htmlResponse;
@@ -236,13 +244,7 @@ checkboxes.forEach(function(checkbox) {
       let branches_check_status = get_checkboxSet_status("branch")
       let borrowings_check_status = get_checkboxSet_status("borrowing")
 
-      xhr.send(JSON.stringify(
-          { 
-              // gender : genders_check_status ,
-              year : years_check_status ,
-              branch : branches_check_status ,
-              // borrowing : borrowings_check_status,
-          }));
+      xhr.send();
       
   }
   function get_checkboxSet_status(checkbox_set_classer)
@@ -258,6 +260,6 @@ checkboxes.forEach(function(checkbox) {
 
 
     }
+  });
 </script>
 
-@endsection

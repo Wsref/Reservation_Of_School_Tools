@@ -31,31 +31,85 @@
         background-color: rgb(242, 242, 242);
         /* border: 1px solid black; */
         height: 100%;
-        border-bottom: 5px solid rgb(0, 59, 161) ;
+        /* border-bottom: 5px solid rgb(0, 59, 161) ; */
     }
     .usersSideBar , .userData {
         flex: 0 0 20%;
     }
-    .messages{
-        background-color: rgb(243, 237, 237);
-        height:600px; 
-        overflow: hidden; /* Make the div scrollable */
-        flex: 0 0 60%;
-        /* display: flex;
-    flex-wrap: wrap; */
-    }
-    .messages:hover{
+
+
+
+    .messages {
+    background-color: rgb(243, 237, 237);
+    height: 600px;
+    overflow-y: hidden; /* Hide vertical scrollbar initially */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    flex: 0 0 60%;
+    
+}
+.messages:hover{
         overflow: auto;
     }
-    .usersSideBar{
-        background-color: rgb(255, 255, 255);
-        /* width: 200px; Set the width of the div */
-        height:600px; /* Set the height of the div */
-        overflow: hidden; /* Make the div scrollable */
-        /* border: 1px solid black;  */
-        display: flex;
-    flex-direction: column; 
-    }
+
+/* Style the scrollbar */
+.messages::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Style the scrollbar thumb */
+.messages::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Border radius of the scrollbar thumb */
+}
+
+/* Style the scrollbar track */
+.messages::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
+/* Adjust scrollbar appearance when hovering */
+.messages:hover::-webkit-scrollbar-thumb {
+    background-color: #555; /* Color of the scrollbar thumb on hover */
+}
+
+
+
+
+    .usersSideBar {
+    margin-right: 5px;
+    background-color: rgb(255, 255, 255);
+    height: 600px;
+    overflow-y: scroll; /* Enable vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the scrollbar */
+.usersSideBar::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+/* Style the scrollbar thumb */
+.usersSideBar::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Border radius of the scrollbar thumb */
+}
+
+/* Style the scrollbar track */
+.usersSideBar::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color of the scrollbar track */
+}
+
+/* Adjust scrollbar appearance when hovering */
+.usersSideBar:hover::-webkit-scrollbar-thumb {
+    background-color: #555; /* Color of the scrollbar thumb on hover */
+}
+
+
+
+
+
     .usersSideBar:hover{
         overflow:auto;
     }

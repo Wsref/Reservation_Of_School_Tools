@@ -29,7 +29,7 @@ class admin_messagesFactory extends Factory
 
             'replier_id' => fake()->randomElement([1]),
             'replies_to_id' => fake()->numberBetween(1,20)  ,
-            'replies_to_request_id' => fake()->numberBetween(121,160),
+            'replies_to_request_id' => fake()->numberBetween(1,50),
             'reply_msg' => fake()->text(30),
             'response_status' => fake()->randomElement([0,1]),
 

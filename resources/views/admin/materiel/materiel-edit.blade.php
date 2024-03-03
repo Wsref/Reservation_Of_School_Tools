@@ -24,11 +24,11 @@
                             <div class="mb-3">
                                 <label for="">Categorie:</label>
                                 <select name="category" class="form-control">
-                                    <option value="foot_ball">foot_ball</option>
-                                    <option value="basket_ball">basket_ball</option>
-                                    <option value="volley_ball">volley_ball</option>
-                                    <option value="ping_pong">ping_pong</option>
-                                    <option value="matériel_fetes">matériel_fetes</option>
+                                    <option value="FootBall">FootBall</option>
+                                    <option value="BasketBall">BasketBall</option>
+                                    {{-- <option value="volley_ball">volley_ball</option> --}}
+                                    <option value="Ping-Pong">Ping-Pong</option>
+                                    <option value="autre">autre</option>
                                 </select>
                             </div>
                             <div class="mb-3">

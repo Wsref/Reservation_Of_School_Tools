@@ -11,7 +11,9 @@ function showOverview() {
 
 function showActivities() {
 
-
+array.forEach(element => {
+    
+});
     activitiesBtn.className = "OAbtnChosen"
 
     fetch('get-data')

@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Materiel;
+use App\Models\materiels;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File as FacadesFile;
 
 class MaterielController extends Controller
 {
     public function show_materiel(){
-        $materiels = Materiel::paginate('4');
+        $materiels = materiels::paginate('4');
 
         return view('admin.materiel.materiel',compact('materiels'));
     }
@@ -18,7 +19,7 @@ class MaterielController extends Controller
     // -------------------------------------------------------------
 
     public function save_materiel(Request $request){
-        $new_materiel = new Materiel();
+        $new_materiel = new materiels();
         $new_materiel->name = $request->input('nom');
 
         // $new_materiel->image = $request->input('');
@@ -41,14 +42,14 @@ class MaterielController extends Controller
     // -------------------------------------------------------------
 
     public function edit_materiel($id){
-        $edit_materiel = Materiel::find($id);
+        $edit_materiel = materiels::find($id);
         return view('admin.materiel.materiel-edit',compact('edit_materiel'));
     }
 
     // -------------------------------------------------------------
 
     public function update_materiel(Request $request,$id){
-        $materiel = Materiel::find($id);
+        $materiel = materiels::find($id);
         $materiel->name = $request->input('nom');
         if($request->hasFile('image')){
 
@@ -76,7 +77,7 @@ class MaterielController extends Controller
     // -------------------------------------------------------------
 
     public function delete_materiel($id){
-        $materiel = Materiel::find($id);
+        $materiel = materiels::find($id);
         $materiel->delete();
         return redirect()->back()->with('status','supprimé avec success');
     }
@@ -85,7 +86,7 @@ class MaterielController extends Controller
 
     public function search_materiel(Request $request){
         $outup = "";
-        $materiel = Materiel::where('name','Like','%'.$request->search.'%')->orWhere('category','Like','%'.$request->search.'%')->paginate('4');
+        $materiel = materiels::where('name','Like','%'.$request->search.'%')->orWhere('category','Like','%'.$request->search.'%')->paginate('4');
 
         foreach($materiel as $materl){
             $outup.= '
@@ -93,7 +94,7 @@ class MaterielController extends Controller
                     <td>'.$materl->name.'</td>
                     <td>'.$materl->category.'</td>
                     <td>'.$materl->quantite.'</td>
-                    <td>'.$materl->updated_at.'</td>
+                    <td></td>
                     <td>
                     '.'
                         <a href="/edit-materiel/yxwiu=' .$materl->id.'" class="btn btn-sm btn-secondary">
@@ -101,7 +102,7 @@ class MaterielController extends Controller
                     </td>
                     <td>
                     '.'
-                        <button type="button" class="btn btn-sm btn-secondary deletebtn" data-bs-toggle="modal" data-bs-target="#deletModal" data-bs-materiel-id="'.$materl->id.'">
+                        <button type="button" class="btn btn-sm btn-secondary deletebtn" data-toggle="modal" data-target="#deletModal" data-materiel-id="'.$materl->id.'">
                         '.'Supprimer</button>'.'
                     </td>
                 </tr>

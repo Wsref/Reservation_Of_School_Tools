@@ -43,7 +43,7 @@
                     
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>
                         <button type="submit" class="btn btn-sm btn-primary">Ajouter Matériel</button>
                     </div>
             </form>
@@ -66,7 +66,7 @@
               <h6>Est ce que vous etes sure de supprimmer ce materiel?</h6>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Fermer</button>
               <button type="submit" class="btn btn-sm btn-primary">Confrmer</button>
           </div>
         </form>
@@ -81,12 +81,12 @@
       <div class="card">
         <div class="card-header">
             <h5>Matériels
-                <button type="button" class="btn btn-sm btn-secondary float-end"  data-bs-toggle="modal" data-bs-target="#exampleModal" >Ajouter</button>
+                <button type="button" class="btn btn-sm btn-secondary float-end"  data-toggle="modal" data-target="#exampleModal" >Ajouter</button>
             </h5>
             @if(session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
-                <button type="button" class="btn-close float-right" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close float-right" data-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
         </div>
@@ -108,12 +108,12 @@
                             <td>{{ $materiel->name }}</td>
                             <td>{{ $materiel->category }}</td>
                             <td>{{ $materiel->quantite }}</td>
-                            <td>{{ $materiel->updated_at }}</td>
+                            <td></td>
                             <td>
                                 <a href="{{ url('/edit-materiel/yxwiu=' . $materiel->id ) }}" class="btn btn-sm btn-secondary">Editer</a>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-secondary deletebtn" data-bs-toggle="modal" data-bs-target="#deletModal" data-bs-materiel-id="{{ $materiel->id }}">Supprimer</button>                 
+                                <button type="button" class="btn btn-sm btn-secondary deletebtn" data-toggle="modal" data-target="#deletModal" data-materiel-id="{{ $materiel->id }}">Supprimer</button>                 
                             </td>
                         </tr>
 
@@ -172,7 +172,7 @@
                 $('#search-content').html(response.data);
                 $('#pagin').html(response.pagination);
                 var materielIds = response.materilIds;
-                // console.log('materielIds search',materielIds); just pour tester car j'ai des problems ici
+                 console.log('materielIds search',materielIds);
                 materielIds.forEach(urlid => {
                     $('.deletebtn').click(function () {
                     var url = "{{ url('/delete-materiel/yxkpq=') }}" + urlid;
@@ -189,4 +189,3 @@
 </script>
 
 @endsection
-

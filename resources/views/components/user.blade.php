@@ -1,4 +1,4 @@
-@props(['users','borrows'])
+@props(['users','borrows','Mat_reservs'])
 
 @foreach ($users as $user)
 <a href="/users/{{$user['id']}}">
@@ -7,7 +7,21 @@
         <div class="table-cell">{{$user['pname']}}</div>
         <div class="table-cell">{{$user['year']}}</div>
         <div class="table-cell">{{$user['branch']}}</div>
-        <div class="table-cell">none</div>
+        <div class="table-cell"> 
+            <?php
+            // dd($Mat_reservs);
+                
+            $borrowed = false;
+            foreach ($Mat_reservs as $reserve) {
+                // echo $reserve->user_id." ".$reserve->materiels->name."<br>" ;
+            if ( $reserve->user_id == $user['id'] && $reserve->date_reserve == '2024-03-02') {
+                $borrowed= true ;
+                echo $reserve->materiels->name."  x".$reserve->quantite;
+            }
+            }
+            if (!$borrowed) {
+                echo "none";
+            } ?> </div>
     </div>
 </a>
 @endforeach

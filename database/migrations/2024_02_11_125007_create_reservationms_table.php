@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('date_reserve')->nullable();
             $table->tinyInteger('valide')->default(0);
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('individuals')->onDelete('cascade');
             $table->foreign('materiel_id')->references('id')->on('materiels')->onDelete('cascade');
             $table->timestamps();
         });

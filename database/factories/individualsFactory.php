@@ -21,9 +21,23 @@ class individualsFactory extends Factory
     public function definition(): array
     {
         return [
+
+            // $table->id();
+            // $table->integer('usertype')->default(0);
+            // $table->string('fname');
+            // $table->string('pname');
+            // $table->string('branch');
+            // $table->string('telephon');
+            // $table->integer('year');
+            // $table->string('email')->unique();
+            // // $table->timestamp('email_verified_at')->nullable();
+            // $table->string('password');
+
+
             'fname' => fake()->lastName(),
             'pname' => fake()->firstName(),
-            'branch' => fake()->lexify('???'),
+            'branch' => fake()->randomElement(["GI","TCC","GE"]),
+            'telephon' => fake()->phoneNumber(),
             'year' => fake()->randomElement([1, 2]),
             'email' => fake()->unique()->safeEmail(),
             // 'email_verified_at' => now(),

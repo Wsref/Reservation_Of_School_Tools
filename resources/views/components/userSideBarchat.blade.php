@@ -9,11 +9,15 @@
 
 
 <style>
+    
     img{
         height: 20px;
         width: 20px;
     }
     .user{
+        box-shadow: 8px 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 5px;
+        margin-bottom: 5px;
         border-radius: 3px;
         height: fit-content;
         padding: 8px;
@@ -71,10 +75,6 @@
             // msgBoxcontainer.innerHTML= div.textContent + div.id;
             let id = div.id
             id = parseInt(id)
-
-
-
-
 
             // Handle button click for component 1
             //!might remove the click case and just put function

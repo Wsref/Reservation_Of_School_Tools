@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\messages;
 use App\Models\individuals;
+use App\Models\Reservationm;
 use Illuminate\Http\Request;
 use App\Models\material_borrow;
 use Illuminate\Support\Facades\DB;
@@ -21,11 +22,14 @@ class material_borrowController extends Controller
           return response()->json($data);
       }
 
-      public function getBorrowsHtml()
+      public function getBorrowsHtml($id)
     {
-    $borrows = material_borrow::all(); // Retrieve borrows from the database or wherever
+    $borrows = DB::select('select * from material_borrow where userId = ?',[$id]); // Retrieve borrows from the database or wherever
+    // $Mat_reservs = DB::select(' select * from reservationms where user_id = ? order by date_reserve desc ' , [$id]);
+    $Mat_reservs = Reservationm::with('materiels')->where('user_id', $id)->orderByDesc('date_reserve')->get();
+    // $Mat_reservs = Reservationm::all();
     
-    return View::make('components.userBorrow', ['borrows' => $borrows])->render();
+    return View::make('components.userBorrow', ['borrows' => $borrows ,'Mat_reservs'=>$Mat_reservs])->render();
     }   
     
     public function getBorrowChartsHtml()
