@@ -35,6 +35,8 @@
             <h6 style="display: inline-block; margin: 0;"> année</h6><br>
             <label for="">Telephon</label>
             <h6 id="telephon"></h6>
+            <label for="">Terain</label>
+            <h6 id="terain"></h6> 
         
         </div>
         <div class="modal-footer">
@@ -45,7 +47,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-8">
     <div class="card">
       <div class="card-header">
         <h6>Reservations Terain</h6>
@@ -53,6 +55,19 @@
       <div class="card-body" >
         <div class="scrollable-div">
           <div id='calendar'></div> 
+        </div>
+        
+      </div>  
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h6>Demande Réservations</h6>
+      </div>  
+      <div class="card-body" >
+        <div class="scrollable-div">
+            <p>Toutes Réservations accépté par defaut</p>
         </div>
         
       </div>  
@@ -129,6 +144,7 @@
                         $('#filiere').html(data.filiere);
                         $('#anne').html(data.anne);
                         $('#telephon').html(data.telephon);
+                        $('#terain').html(data.terain);
                       }
                   });
               });

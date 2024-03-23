@@ -32,7 +32,7 @@
             <h6 id="filiere" style="display: inline-block; margin: 0;"></h6>
             <h6 style="display: inline-block; margin: 0;">|</h6>
             <h6 id="anne" style="display: inline-block; margin: 0;"></h6>
-            <h6 style="display: inline-block; margin: 0;"> année</h6><br>
+            <h6 style="display: inline-block; margin: 0;"></h6><br>
             <label for="">Telephon</label>
             <h6 id="telephon"></h6>
             <label for="">Matériel reservé</label><br>
@@ -51,14 +51,36 @@
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-            <h6>Reservations Materiel</h6>
+            <h6>Réservation Materiels</h6>
         </div>  
         <div class="card-body" >
           <div class="scrollable-div">
             <div id='calendar'></div> 
+          </div>
+          
+        </div>  
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+            <h6>Demande Réservations</h6>
+        </div>  
+        <div class="card-body" >
+          <div class="scrollable-div">
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+  
+                <tbody class="main-data" id="demandes">
+  
+                </tbody>
+  
+            </table>
+            </div>
+
           </div>
           
         </div>  
@@ -73,8 +95,51 @@
 @endsection
 {{-- ---------------------------------------------------------- --}}
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales-all.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales-all.global.min.js"></script> 
 <script src="{{ asset('assets/reserveCalend/index.global.js') }}"></script>
+
+<script>
+
+  retrieveDemandes(); 
+
+  function retrieveDemandes(){
+    $.ajax({
+      type : 'get',
+      url : '{{ URL::to('demandes_reserv_materiel') }}',
+      success : function(response){
+        $('#demandes').html(response.data);
+        
+            $('.yop').click(function () {
+                var reservId = $(this).val();
+                retrieveDemandesAfterClick(reservId,"y");
+                
+            });
+            $('.nop').click(function () {
+              var reservId = $(this).val();
+              retrieveDemandesAfterClick(reservId,"n");
+            });
+       
+
+      }
+    });
+  }
+
+  function retrieveDemandesAfterClick(resId,mode){
+    $.ajax({
+      type : 'get',
+      url : '{{ URL::to('demandes_reserv_materiel_after') }}',
+      data : {'resId':resId,'mode':mode},
+      success : function(response){
+        // $('#demandes').html(response.data);
+        retrieveDemandes();
+        
+      }
+    });
+  }
+  
+</script>
+
+
 
 <script>
   

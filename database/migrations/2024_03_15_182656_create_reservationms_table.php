@@ -11,13 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservationts', function (Blueprint $table) {
+        Schema::create('reservationms', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->date('date_reserve')->nullable();
-            $table->tinyInteger('valide')->default(0);
-
+            $table->unsignedBigInteger('materiel_id');
+            $table->Integer('quantite');
+            $table->date('date_reserve');
+            $table->time('time_reserve');
+            $table->date('date_reserve_end');
+            $table->time('time_reserve_end');
+            $table->integer('valide')->default(-1);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('materiel_id')->references('id')->on('materiels')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservationts');
+        Schema::dropIfExists('reservationms');
     }
 };

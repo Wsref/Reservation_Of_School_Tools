@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservationms', function (Blueprint $table) {
+        Schema::create('dynamique_quantites', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('materiel_id');
             $table->Integer('quantite');
-            $table->date('date_reserve')->nullable();
-            $table->tinyInteger('valide')->default(0);
+            $table->date('date_reserve');
+            $table->time('time_reserve');
+            $table->date('date_reserve_end');
+            $table->time('time_reserve_end');
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('materiel_id')->references('id')->on('materiels')->onDelete('cascade');
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservationms');
+        Schema::dropIfExists('dynamique_quantites');
     }
 };

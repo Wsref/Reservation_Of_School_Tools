@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nom');
             $table->string('telephon');
             $table->string('filiere');
-            $table->Integer('anne');
+            $table->year('anne');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -11,4 +11,8 @@ class Reservationt extends Model
     public function users(){
         return $this->belongsTo(User::class,'user_id');
     }
+
+    public function terains(){
+        return $this->belongsTo(Terain::class,'terain_id');
+    }
 }

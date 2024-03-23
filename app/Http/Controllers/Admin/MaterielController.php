@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DynamiqueQuantite;
 use App\Models\Materiel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File as FacadesFile;
 
 class MaterielController extends Controller
 {
-    public function show_materiel(){
-        $materiels = Materiel::paginate('4');
 
-        return view('admin.materiel.materiel',compact('materiels'));
+    public function show_materiel(){
+        $materiels = Materiel::all();
+        $dynQuantities = DynamiqueQuantite::where('date_reserve','=',date('Y-m-d'))->orderBy('time_reserve')->paginate(8);
+        if(count($dynQuantities)<=0){
+            return view('admin.materiel.materiel',compact('materiels','dynQuantities'))->with('dynQuantVid','Pas de données a afficher');
+        }
+        return view('admin.materiel.materiel',compact('materiels','dynQuantities'));
+        
     }
 
     // -------------------------------------------------------------
@@ -26,7 +32,7 @@ class MaterielController extends Controller
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extention;
-            $file->move('uploads/imgs',$filename);
+            $file->move('myImg/materiels',$filename);
             $new_materiel->image = $filename;
         }
 
@@ -40,19 +46,12 @@ class MaterielController extends Controller
 
     // -------------------------------------------------------------
 
-    public function edit_materiel($id){
-        $edit_materiel = Materiel::find($id);
-        return view('admin.materiel.materiel-edit',compact('edit_materiel'));
-    }
-
-    // -------------------------------------------------------------
-
     public function update_materiel(Request $request,$id){
         $materiel = Materiel::find($id);
         $materiel->name = $request->input('nom');
         if($request->hasFile('image')){
 
-            $my_old_img_path = 'uploads/imgs/' . $materiel->image;
+            $my_old_img_path = 'myImg/materiels/' . $materiel->image;
             if(FacadesFile::exists($my_old_img_path)){
                 FacadesFile::delete($my_old_img_path);
             }
@@ -60,7 +59,7 @@ class MaterielController extends Controller
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extention;
-            $file->move('uploads/imgs',$filename);
+            $file->move('myImg/materiels',$filename);
             $materiel->image = $filename;
         }
         $materiel->category = $request->input('category');
@@ -85,7 +84,10 @@ class MaterielController extends Controller
 
     public function search_materiel(Request $request){
         $outup = "";
-        $materiel = Materiel::where('name','Like','%'.$request->search.'%')->orWhere('category','Like','%'.$request->search.'%')->paginate('4');
+        $materiel = Materiel::where('name','Like','%'.$request->search.'%')
+                             ->orWhere('category','Like','%'.$request->search.'%')
+                             ->orWhere('quantite','Like','%'.$request->search.'%')
+                             ->get();
 
         foreach($materiel as $materl){
             $outup.= '
@@ -93,28 +95,39 @@ class MaterielController extends Controller
                     <td>'.$materl->name.'</td>
                     <td>'.$materl->category.'</td>
                     <td>'.$materl->quantite.'</td>
-                    <td>'.$materl->updated_at.'</td>
                     <td>
                     '.'
-                        <a href="/edit-materiel/yxwiu=' .$materl->id.'" class="btn btn-sm btn-secondary">
-                        '.'Editer</a>'.'
+                        <button type="button" class="btn btn-sm btn-primary editbtn" data-bs-toggle="modal" data-bs-target="#editModal" value="'.$materl->id.'">
+                        '.'Editer</button>'.'
                     </td>
                     <td>
                     '.'
-                        <button type="button" class="btn btn-sm btn-secondary deletebtn" data-bs-toggle="modal" data-bs-target="#deletModal" data-bs-materiel-id="'.$materl->id.'">
+                        <button type="button" class="btn btn-sm btn-danger deletebtn" data-bs-toggle="modal" data-bs-target="#deletModal" value="'.$materl->id.'">
                         '.'Supprimer</button>'.'
                     </td>
                 </tr>
 
             ';
+            
         }
 
         return response()->json([
-            'pagination' => $materiel->links()->toHtml(), 
             'data' => $outup ,
             'materilIds' => $materiel->pluck('id')
         ]);
 
+    }
+
+    // -------------------------------------------------------------------------------------------------
+
+    public function get_materiel_edited(Request $request){
+        $myMateriel = Materiel::where('id','=',$request->materielId)->first();
+        $nom  = $myMateriel->name;
+        $category = $myMateriel->category;
+        $quantite = $myMateriel->quantite;
+        $image = $myMateriel->image;
+
+        return response()->json(['nom'=>$nom,'category'=>$category,'quantite'=>$quantite,'image'=>$image]);
     }
 
 
